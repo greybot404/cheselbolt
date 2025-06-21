@@ -1,122 +1,135 @@
-import React from 'react';
-import { Card } from '../ui/Card';
-import { User } from '../../types';
-import { BodyData } from '../../types';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Scale, TrendingUp, Target, Calendar } from 'lucide-react';
+import Card from '../ui/Card';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
-interface BodyModuleProps {
-  user: User;
-  data: BodyData;
-  onDataUpdate: (data: Partial<BodyData>) => void;
-}
+const BodyModule: React.FC = () => {
+  const [currentWeight, setCurrentWeight] = useState(70);
+  const [targetWeight, setTargetWeight] = useState(65);
 
-export function BodyModule({ user, data, onDataUpdate }: BodyModuleProps) {
-  const tabs = [
-    { id: 'face', label: 'Face' },
-    { id: 'skin', label: 'Skin' },
-    { id: 'hair', label: 'Hair' },
-    ...(user.gender === 'male' ? [{ id: 'beard', label: 'Beard' }] : [])
+  const weightData = [
+    { date: 'Jan', weight: 72 },
+    { date: 'Feb', weight: 71.5 },
+    { date: 'Mar', weight: 71 },
+    { date: 'Apr', weight: 70.5 },
+    { date: 'May', weight: 70 },
   ];
 
-  const mockAnalysis = {
-    face: { score: 78, critique: 'Strong jawline with good symmetry. Consider subtle grooming adjustments.', actionPlan: [] },
-    skin: { score: 72, critique: 'Generally healthy complexion. Some areas could benefit from targeted care.', actionPlan: [] },
-    hair: { score: 85, critique: 'Excellent texture and style. Maintain current routine with minor adjustments.', actionPlan: [] },
-    beard: { score: 80, critique: 'Well-maintained beard with good coverage. Consider trimming for sharper lines.', actionPlan: [] }
-  };
+  const bodyMetrics = [
+    { label: 'Body Fat', value: '18%', change: '-2%', positive: true },
+    { label: 'Muscle Mass', value: '45kg', change: '+1kg', positive: true },
+    { label: 'BMI', value: '22.5', change: '-0.5', positive: true },
+    { label: 'Water %', value: '62%', change: '+1%', positive: true },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-8 pb-24 px-6">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-light text-black">Body Analysis</h1>
-          <p className="text-gray-600">Comprehensive assessment and optimization</p>
+    <div className="space-y-6">
+      {/* Weight Overview */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">Body Composition</h2>
+            <p className="text-white/70">Track your physical progress</p>
+          </div>
+          <Scale className="w-8 h-8 text-indigo-400" />
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-gray-100 p-1 rounded">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => onDataUpdate({ activeTab: tab.id as any })}
-              className={`flex-1 py-2 px-4 text-sm font-medium rounded transition-colors ${
-                data.activeTab === tab.id
-                  ? 'bg-white text-black shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-white mb-1">{currentWeight}kg</div>
+            <div className="text-white/70 text-sm">Current Weight</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-indigo-400 mb-1">{targetWeight}kg</div>
+            <div className="text-white/70 text-sm">Target Weight</div>
+          </div>
+        </div>
+
+        <div className="h-48 mb-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={weightData}>
+              <XAxis 
+                dataKey="date" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
+              />
+              <YAxis 
+                domain={['dataMin - 1', 'dataMax + 1']}
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="weight" 
+                stroke="#6366f1" 
+                strokeWidth={3}
+                dot={{ fill: '#6366f1', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, fill: '#8b5cf6' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </Card>
+
+      {/* Body Metrics */}
+      <Card className="p-6">
+        <div className="flex items-center mb-4">
+          <TrendingUp className="w-6 h-6 text-indigo-400 mr-3" />
+          <h3 className="text-lg font-semibold text-white">Body Metrics</h3>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {bodyMetrics.map((metric, index) => (
+            <motion.div
+              key={metric.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className="bg-white/5 rounded-xl p-4 border border-white/10"
             >
-              {tab.label}
-            </button>
+              <div className="text-white/70 text-sm mb-1">{metric.label}</div>
+              <div className="text-xl font-bold text-white mb-1">{metric.value}</div>
+              <div className={`text-sm flex items-center ${
+                metric.positive ? 'text-green-400' : 'text-red-400'
+              }`}>
+                <TrendingUp className={`w-3 h-3 mr-1 ${metric.positive ? '' : 'rotate-180'}`} />
+                {metric.change}
+              </div>
+            </motion.div>
           ))}
         </div>
+      </Card>
 
-        {/* Analysis Dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Score Card */}
-          <Card className="p-8 text-center">
-            <div className="space-y-4">
-              <h2 className="text-lg font-medium text-black capitalize">
-                {data.activeTab} Score
-              </h2>
-              <div className="text-4xl font-light text-black">
-                {mockAnalysis[data.activeTab]?.score || 0}
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-black h-2 rounded-full" 
-                  style={{ width: `${mockAnalysis[data.activeTab]?.score || 0}%` }}
-                ></div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Analysis Card */}
-          <Card className="p-6">
-            <h3 className="font-medium text-black mb-3 capitalize">
-              {data.activeTab} Analysis
-            </h3>
-            <p className="text-gray-700 text-sm leading-relaxed">
-              {mockAnalysis[data.activeTab]?.critique}
-            </p>
-          </Card>
+      {/* Goals */}
+      <Card className="p-6">
+        <div className="flex items-center mb-4">
+          <Target className="w-6 h-6 text-indigo-400 mr-3" />
+          <h3 className="text-lg font-semibold text-white">Current Goals</h3>
         </div>
 
-        {/* Additional Analysis Cards */}
-        <div className="grid gap-4">
-          <Card className="p-6">
-            <h3 className="font-medium text-black mb-3">Optimization Protocol</h3>
-            <div className="space-y-2">
-              {data.activeTab === 'face' && (
-                <>
-                  <p className="text-gray-700 text-sm">• Maintain consistent skincare routine</p>
-                  <p className="text-gray-700 text-sm">• Consider professional eyebrow shaping</p>
-                  <p className="text-gray-700 text-sm">• Use SPF 30+ daily for protection</p>
-                </>
-              )}
-              {data.activeTab === 'skin' && (
-                <>
-                  <p className="text-gray-700 text-sm">• Increase hydration with hyaluronic acid</p>
-                  <p className="text-gray-700 text-sm">• Add vitamin C serum to morning routine</p>
-                  <p className="text-gray-700 text-sm">• Exfoliate 2-3 times per week</p>
-                </>
-              )}
-              {data.activeTab === 'hair' && (
-                <>
-                  <p className="text-gray-700 text-sm">• Schedule trim every 6-8 weeks</p>
-                  <p className="text-gray-700 text-sm">• Use quality styling products sparingly</p>
-                  <p className="text-gray-700 text-sm">• Consider scalp massage for health</p>
-                </>
-              )}
-              {data.activeTab === 'beard' && user.gender === 'male' && (
-                <>
-                  <p className="text-gray-700 text-sm">• Trim edges for sharp definition</p>
-                  <p className="text-gray-700 text-sm">• Use beard oil for conditioning</p>
-                  <p className="text-gray-700 text-sm">• Shape neckline professionally</p>
-                </>
-              )}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+            <div>
+              <div className="text-white font-medium">Lose 5kg</div>
+              <div className="text-white/70 text-sm">Target: End of June</div>
             </div>
-          </Card>
+            <div className="text-indigo-400 font-bold">70%</div>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+            <div>
+              <div className="text-white font-medium">Build Muscle</div>
+              <div className="text-white/70 text-sm">+2kg lean mass</div>
+            </div>
+            <div className="text-indigo-400 font-bold">45%</div>
+          </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
-}
+};
+
+export default BodyModule;

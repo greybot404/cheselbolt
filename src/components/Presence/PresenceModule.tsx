@@ -1,165 +1,196 @@
-import React from 'react';
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Send, BarChart3 } from 'lucide-react';
-import { PresenceData } from '../../types';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Sparkles, Heart, Brain, Users } from 'lucide-react';
+import Card from '../ui/Card';
 
-interface PresenceModuleProps {
-  data: PresenceData;
-  onDataUpdate: (data: Partial<PresenceData>) => void;
-}
+const PresenceModule: React.FC = () => {
+  const [selectedAspect, setSelectedAspect] = useState('confidence');
 
-export function PresenceModule({ data, onDataUpdate }: PresenceModuleProps) {
-  const [inputMessage, setInputMessage] = React.useState('');
-  const [showAnalysis, setShowAnalysis] = React.useState(false);
-
-  const handleSendMessage = () => {
-    if (inputMessage.trim()) {
-      const newMessage = {
-        id: Date.now().toString(),
-        text: inputMessage,
-        isUser: true,
-        timestamp: new Date()
-      };
-
-      const botResponse = {
-        id: (Date.now() + 1).toString(),
-        text: "I understand. Let me help you develop stronger presence through targeted communication strategies. What specific situation would you like to improve?",
-        isUser: false,
-        timestamp: new Date()
-      };
-
-      onDataUpdate({
-        messages: [...data.messages, newMessage, botResponse]
-      });
-      setInputMessage('');
+  const presenceAspects = [
+    {
+      id: 'confidence',
+      name: 'Confidence',
+      icon: Sparkles,
+      score: 85,
+      description: 'Your self-assurance and inner strength',
+      tips: [
+        'Practice power poses for 2 minutes daily',
+        'Maintain eye contact during conversations',
+        'Speak with clear, measured pace'
+      ]
+    },
+    {
+      id: 'charisma',
+      name: 'Charisma',
+      icon: Heart,
+      score: 78,
+      description: 'Your ability to attract and influence others',
+      tips: [
+        'Show genuine interest in others',
+        'Use open body language',
+        'Share authentic stories'
+      ]
+    },
+    {
+      id: 'mindfulness',
+      name: 'Mindfulness',
+      icon: Brain,
+      score: 92,
+      description: 'Your awareness and presence in the moment',
+      tips: [
+        'Practice daily meditation',
+        'Focus on breath awareness',
+        'Observe without judgment'
+      ]
+    },
+    {
+      id: 'social',
+      name: 'Social Skills',
+      icon: Users,
+      score: 73,
+      description: 'Your ability to connect and communicate',
+      tips: [
+        'Practice active listening',
+        'Ask thoughtful questions',
+        'Remember personal details'
+      ]
     }
-  };
+  ];
 
-  const handleAnalyze = () => {
-    const mockAnalysis = {
-      score: 72,
-      critique: "Your communication shows confidence but could benefit from more strategic pausing and vocal projection.",
-      actionPlan: []
-    };
-    
-    onDataUpdate({ analysis: mockAnalysis });
-    setShowAnalysis(true);
-  };
+  const dailyPractices = [
+    { name: 'Morning Affirmations', completed: true, streak: 12 },
+    { name: 'Posture Check', completed: true, streak: 8 },
+    { name: 'Gratitude Journal', completed: false, streak: 5 },
+    { name: 'Social Interaction', completed: true, streak: 15 },
+  ];
+
+  const selectedAspectData = presenceAspects.find(aspect => aspect.id === selectedAspect);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="flex-1 pt-8 pb-4 px-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center space-y-2 mb-8">
-            <h1 className="text-2xl font-light text-black">Presence Coach</h1>
-            <p className="text-gray-600">Develop commanding presence and communication skills</p>
+    <div className="space-y-6">
+      {/* Presence Overview */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">Presence & Charisma</h2>
+            <p className="text-white/70">Develop your magnetic personality</p>
+          </div>
+          <Sparkles className="w-8 h-8 text-indigo-400" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {presenceAspects.map((aspect, index) => {
+            const Icon = aspect.icon;
+            return (
+              <motion.button
+                key={aspect.id}
+                onClick={() => setSelectedAspect(aspect.id)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                className={`p-4 rounded-xl border transition-all duration-300 text-left ${
+                  selectedAspect === aspect.id
+                    ? 'bg-indigo-500/20 border-indigo-400/30'
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
+                }`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Icon className="w-6 h-6 text-indigo-400 mb-2" />
+                <div className="text-white font-medium mb-1">{aspect.name}</div>
+                <div className="text-2xl font-bold text-white mb-1">{aspect.score}%</div>
+                <div className="w-full bg-white/10 rounded-full h-2">
+                  <div
+                    className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full"
+                    style={{ width: `${aspect.score}%` }}
+                  />
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* Selected Aspect Details */}
+      {selectedAspectData && (
+        <Card className="p-6">
+          <div className="flex items-center mb-4">
+            <selectedAspectData.icon className="w-6 h-6 text-indigo-400 mr-3" />
+            <h3 className="text-lg font-semibold text-white">{selectedAspectData.name}</h3>
           </div>
 
-          {/* Messages */}
-          <div className="space-y-4 mb-4">
-            {data.messages.length === 0 ? (
-              <Card className="p-8 text-center">
-                <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-black mb-2">Start Your Presence Journey</h3>
-                <p className="text-gray-600">
-                  Ask me anything about developing stronger presence, confidence, or communication skills.
-                </p>
-              </Card>
-            ) : (
-              data.messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+          <p className="text-white/70 mb-6">{selectedAspectData.description}</p>
+
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-white/70">Current Level</span>
+              <span className="text-white font-semibold">{selectedAspectData.score}%</span>
+            </div>
+            <div className="w-full bg-white/10 rounded-full h-3">
+              <motion.div
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${selectedAspectData.score}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-white font-medium mb-3">Improvement Tips:</h4>
+            <div className="space-y-2">
+              {selectedAspectData.tips.map((tip, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  className="flex items-center p-3 bg-white/5 rounded-xl border border-white/10"
                 >
-                  <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                      message.isUser
-                        ? 'bg-black text-white'
-                        : 'bg-white border border-gray-200 text-gray-900'
-                    }`}
-                  >
-                    <p className="text-sm">{message.text}</p>
+                  <div className="w-2 h-2 bg-indigo-400 rounded-full mr-3" />
+                  <span className="text-white/80">{tip}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Daily Practices */}
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Daily Practices</h3>
+        <div className="space-y-3">
+          {dailyPractices.map((practice, index) => (
+            <motion.div
+              key={practice.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 ${
+                practice.completed
+                  ? 'bg-green-500/10 border-green-400/30'
+                  : 'bg-white/5 border-white/10'
+              }`}
+            >
+              <div className="flex items-center">
+                <div className={`w-3 h-3 rounded-full mr-3 ${
+                  practice.completed ? 'bg-green-400' : 'bg-white/30'
+                }`} />
+                <div>
+                  <div className={`font-medium ${practice.completed ? 'text-green-400' : 'text-white'}`}>
+                    {practice.name}
+                  </div>
+                  <div className={`text-sm ${practice.completed ? 'text-green-400/70' : 'text-white/70'}`}>
+                    {practice.streak} day streak
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-
-          {/* Analyze Button */}
-          {data.messages.filter(m => m.isUser).length >= 2 && (
-            <div className="mb-4">
-              <Button
-                onClick={handleAnalyze}
-                variant="outline"
-                className="w-full"
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Analyze My Presence
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Input Area */}
-      <div className="bg-white border-t border-gray-200 p-4 pb-24">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Ask your question..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-            />
-            <Button
-              onClick={handleSendMessage}
-              disabled={!inputMessage.trim()}
-              className="rounded-full px-4"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Analysis Modal */}
-      {showAnalysis && data.analysis && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md p-6 space-y-4">
-            <h2 className="text-xl font-medium text-black">Presence Analysis</h2>
-            
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-light text-black">
-                Presence Score: {data.analysis.score}
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-black h-2 rounded-full" 
-                  style={{ width: `${data.analysis.score}%` }}
-                ></div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-medium text-black mb-2">Summary</h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                {data.analysis.critique}
-              </p>
-            </div>
-
-            <Button
-              onClick={() => setShowAnalysis(false)}
-              className="w-full"
-              variant="primary"
-            >
-              Close
-            </Button>
-          </Card>
+            </motion.div>
+          ))}
         </div>
-      )}
+      </Card>
     </div>
   );
-}
+};
+
+export default PresenceModule;
