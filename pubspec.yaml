@@ -1,5 +1,5 @@
 name: chesel
-description: Master Component & Microcopy Blueprint - Cross Platform App
+description: Master Component & Microcopy Blueprint - Cross Platform App with Glassmorphism Design
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -13,6 +13,10 @@ dependencies:
   cupertino_icons: ^1.0.6
   shared_preferences: ^2.2.2
   google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  fl_chart: ^0.66.0
+  animated_text_kit: ^4.2.2
+  glassmorphism: ^3.0.0
 
 dev_dependencies:
   flutter_test:

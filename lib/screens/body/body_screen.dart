@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../../widgets/custom_card.dart';
+import '../../widgets/glass_container.dart';
+import '../../widgets/animated_score_meter.dart';
 
 class BodyScreen extends StatelessWidget {
   final User user;
@@ -64,9 +65,19 @@ class BodyScreen extends StatelessWidget {
       },
     };
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1a1a2e),
+            Color(0xFF16213e),
+            Color(0xFF0f3460),
+          ],
+        ),
+      ),
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -81,7 +92,7 @@ class BodyScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontFamily: 'LibreBaskerville',
                       fontWeight: FontWeight.w300,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -89,7 +100,7 @@ class BodyScreen extends StatelessWidget {
                     'Comprehensive assessment and optimization',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontFamily: 'LibreBaskerville',
-                      color: Colors.grey[600],
+                      color: Colors.white.withOpacity(0.7),
                     ),
                   ),
                 ],
@@ -98,12 +109,8 @@ class BodyScreen extends StatelessWidget {
               const SizedBox(height: 32),
               
               // Tab Navigation
-              Container(
+              GlassContainer(
                 padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(8),
-                ),
                 child: Row(
                   children: tabs.map((tab) {
                     final isActive = activeTab == tab['id'];
@@ -112,18 +119,17 @@ class BodyScreen extends StatelessWidget {
                         onTap: () => onDataUpdate({'activeTab': tab['id']}),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           decoration: BoxDecoration(
-                            color: isActive ? Colors.white : Colors.transparent,
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: isActive
-                                ? [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ]
+                            color: isActive 
+                                ? const Color(0xFF6366F1).withOpacity(0.3)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                            border: isActive
+                                ? Border.all(
+                                    color: const Color(0xFF6366F1).withOpacity(0.5),
+                                    width: 1,
+                                  )
                                 : null,
                           ),
                           child: Text(
@@ -132,7 +138,9 @@ class BodyScreen extends StatelessWidget {
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'LibreBaskerville',
-                              color: isActive ? Colors.black : Colors.grey[600],
+                              color: isActive 
+                                  ? const Color(0xFF6366F1)
+                                  : Colors.white.withOpacity(0.7),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -150,54 +158,21 @@ class BodyScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       // Score Card
-                      CustomCard(
+                      GlassContainer(
                         padding: const EdgeInsets.all(32),
-                        child: Column(
-                          children: [
-                            Text(
-                              '${activeTab.substring(0, 1).toUpperCase()}${activeTab.substring(1)} Score',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontFamily: 'LibreBaskerville',
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              '${mockAnalysis[activeTab]?['score'] ?? 0}',
-                              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                fontFamily: 'LibreBaskerville',
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              width: double.infinity,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: FractionallySizedBox(
-                                alignment: Alignment.centerLeft,
-                                widthFactor: (mockAnalysis[activeTab]?['score'] ?? 0) / 100,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: AnimatedScoreMeter(
+                          score: mockAnalysis[activeTab]?['score']?.toDouble() ?? 0.0,
+                          title: '${activeTab.substring(0, 1).toUpperCase()}${activeTab.substring(1)} Score',
+                          primaryColor: const Color(0xFF6366F1),
+                          secondaryColor: const Color(0xFF8B5CF6),
+                          size: 140,
                         ),
                       ),
                       
                       const SizedBox(height: 16),
                       
                       // Analysis Card
-                      CustomCard(
+                      GlassContainer(
                         padding: const EdgeInsets.all(24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +182,7 @@ class BodyScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontFamily: 'LibreBaskerville',
                                 fontWeight: FontWeight.w500,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -215,7 +190,7 @@ class BodyScreen extends StatelessWidget {
                               mockAnalysis[activeTab]?['critique'] ?? '',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 fontFamily: 'LibreBaskerville',
-                                color: Colors.grey[700],
+                                color: Colors.white.withOpacity(0.8),
                                 height: 1.5,
                               ),
                             ),
@@ -226,7 +201,7 @@ class BodyScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       
                       // Optimization Protocol Card
-                      CustomCard(
+                      GlassContainer(
                         padding: const EdgeInsets.all(24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +211,7 @@ class BodyScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontFamily: 'LibreBaskerville',
                                 fontWeight: FontWeight.w500,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -249,7 +224,7 @@ class BodyScreen extends StatelessWidget {
                                           '• $item',
                                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                             fontFamily: 'LibreBaskerville',
-                                            color: Colors.grey[700],
+                                            color: Colors.white.withOpacity(0.8),
                                           ),
                                         ),
                                       ))

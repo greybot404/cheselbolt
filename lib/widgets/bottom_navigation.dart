@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'glass_container.dart';
 
 class BottomNavigation extends StatelessWidget {
   final String activeTab;
@@ -21,51 +22,60 @@ class BottomNavigation extends StatelessWidget {
     ];
 
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey[200]!,
-            width: 1,
-          ),
-        ),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: tabs.map((tab) {
-              final isActive = activeTab == tab['id'];
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => onTabChange(tab['id'] as String),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          tab['icon'] as IconData,
-                          size: 20,
-                          color: isActive ? Colors.black : Colors.grey[400],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          tab['label'] as String,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'LibreBaskerville',
-                            color: isActive ? Colors.black : Colors.grey[400],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+      margin: const EdgeInsets.all(16),
+      child: GlassContainer(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        borderRadius: BorderRadius.circular(24),
+        blur: 20,
+        opacity: 0.15,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: tabs.map((tab) {
+            final isActive = activeTab == tab['id'];
+            return GestureDetector(
+              onTap: () => onTabChange(tab['id'] as String),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: isActive 
+                      ? const Color(0xFF6366F1).withOpacity(0.3)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(16),
+                  border: isActive
+                      ? Border.all(
+                          color: const Color(0xFF6366F1).withOpacity(0.5),
+                          width: 1,
+                        )
+                      : null,
                 ),
-              );
-            }).toList(),
-          ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      tab['icon'] as IconData,
+                      size: 20,
+                      color: isActive 
+                          ? const Color(0xFF6366F1)
+                          : Colors.white.withOpacity(0.6),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      tab['label'] as String,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'LibreBaskerville',
+                        color: isActive 
+                            ? const Color(0xFF6366F1)
+                            : Colors.white.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

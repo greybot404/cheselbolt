@@ -15,9 +15,9 @@ class CheselApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
 
@@ -27,22 +27,22 @@ class CheselApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.black,
-          brightness: Brightness.light,
+          seedColor: const Color(0xFF6366F1),
+          brightness: Brightness.dark,
         ),
         textTheme: GoogleFonts.libreBaskerville().copyWith(
           displayLarge: const TextStyle(
             fontFamily: 'IMFellEnglishSC',
             fontSize: 32,
             fontWeight: FontWeight.normal,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
-        scaffoldBackgroundColor: const Color(0xFFFAFAFA),
+        scaffoldBackgroundColor: Colors.transparent,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
       ),
       home: const AppWrapper(),
