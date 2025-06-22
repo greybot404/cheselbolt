@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { User, UserCheck } from 'lucide-react';
-import Button from '../ui/Button';
+import { Button } from '../ui/Button';
 
 interface GenderSelectionProps {
   onComplete: (gender: 'male' | 'female') => void;
