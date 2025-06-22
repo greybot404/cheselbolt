@@ -24,25 +24,28 @@ const BodyModule: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Weight Overview */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-1">Body Composition</h2>
-            <p className="text-white/70">Track your physical progress</p>
-          </div>
-          <Scale className="w-8 h-8 text-indigo-400" />
-        </div>
+    <div className="space-y-8 py-8">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center"
+      >
+        <h2 className="text-2xl font-light text-black mb-2">Body Composition</h2>
+        <p className="text-gray-600 font-light">Track your physical progress</p>
+      </motion.div>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
+      {/* Weight Overview */}
+      <Card className="p-8">
+        <div className="grid grid-cols-2 gap-8 mb-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-white mb-1">{currentWeight}kg</div>
-            <div className="text-white/70 text-sm">Current Weight</div>
+            <div className="text-3xl font-light text-black mb-2">{currentWeight}kg</div>
+            <div className="text-gray-500 text-sm font-light">Current Weight</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-indigo-400 mb-1">{targetWeight}kg</div>
-            <div className="text-white/70 text-sm">Target Weight</div>
+            <div className="text-3xl font-light text-gray-400 mb-2">{targetWeight}kg</div>
+            <div className="text-gray-500 text-sm font-light">Target Weight</div>
           </div>
         </div>
 
@@ -53,21 +56,21 @@ const BodyModule: React.FC = () => {
                 dataKey="date" 
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
+                tick={{ fill: '#9CA3AF', fontSize: 12 }}
               />
               <YAxis 
                 domain={['dataMin - 1', 'dataMax + 1']}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
+                tick={{ fill: '#9CA3AF', fontSize: 12 }}
               />
               <Line 
                 type="monotone" 
                 dataKey="weight" 
-                stroke="#6366f1" 
-                strokeWidth={3}
-                dot={{ fill: '#6366f1', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, fill: '#8b5cf6' }}
+                stroke="#000000" 
+                strokeWidth={2}
+                dot={{ fill: '#000000', strokeWidth: 0, r: 3 }}
+                activeDot={{ r: 4, fill: '#000000' }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -75,12 +78,8 @@ const BodyModule: React.FC = () => {
       </Card>
 
       {/* Body Metrics */}
-      <Card className="p-6">
-        <div className="flex items-center mb-4">
-          <TrendingUp className="w-6 h-6 text-indigo-400 mr-3" />
-          <h3 className="text-lg font-semibold text-white">Body Metrics</h3>
-        </div>
-
+      <div className="space-y-4">
+        <h3 className="text-lg font-light text-black">Body Metrics</h3>
         <div className="grid grid-cols-2 gap-4">
           {bodyMetrics.map((metric, index) => (
             <motion.div
@@ -88,46 +87,53 @@ const BodyModule: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="bg-white/5 rounded-xl p-4 border border-white/10"
             >
-              <div className="text-white/70 text-sm mb-1">{metric.label}</div>
-              <div className="text-xl font-bold text-white mb-1">{metric.value}</div>
-              <div className={`text-sm flex items-center ${
-                metric.positive ? 'text-green-400' : 'text-red-400'
-              }`}>
-                <TrendingUp className={`w-3 h-3 mr-1 ${metric.positive ? '' : 'rotate-180'}`} />
-                {metric.change}
-              </div>
+              <Card className="p-6">
+                <div className="text-gray-500 text-sm font-light mb-1">{metric.label}</div>
+                <div className="text-xl font-light text-black mb-2">{metric.value}</div>
+                <div className={`text-sm font-light flex items-center ${
+                  metric.positive ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  <TrendingUp className={`w-3 h-3 mr-1 ${metric.positive ? '' : 'rotate-180'}`} />
+                  {metric.change}
+                </div>
+              </Card>
             </motion.div>
           ))}
         </div>
-      </Card>
+      </div>
 
       {/* Goals */}
-      <Card className="p-6">
-        <div className="flex items-center mb-4">
-          <Target className="w-6 h-6 text-indigo-400 mr-3" />
-          <h3 className="text-lg font-semibold text-white">Current Goals</h3>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-            <div>
-              <div className="text-white font-medium">Lose 5kg</div>
-              <div className="text-white/70 text-sm">Target: End of June</div>
+      <div className="space-y-4">
+        <h3 className="text-lg font-light text-black">Current Goals</h3>
+        <div className="space-y-3">
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-black font-light">Lose 5kg</div>
+                <div className="text-gray-500 text-sm font-light">Target: End of June</div>
+              </div>
+              <div className="text-black font-light">70%</div>
             </div>
-            <div className="text-indigo-400 font-bold">70%</div>
-          </div>
-
-          <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-            <div>
-              <div className="text-white font-medium">Build Muscle</div>
-              <div className="text-white/70 text-sm">+2kg lean mass</div>
+            <div className="w-full bg-gray-100 h-1 mt-4">
+              <div className="bg-black h-1 w-[70%]"></div>
             </div>
-            <div className="text-indigo-400 font-bold">45%</div>
-          </div>
+          </Card>
+
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-black font-light">Build Muscle</div>
+                <div className="text-gray-500 text-sm font-light">+2kg lean mass</div>
+              </div>
+              <div className="text-black font-light">45%</div>
+            </div>
+            <div className="w-full bg-gray-100 h-1 mt-4">
+              <div className="bg-black h-1 w-[45%]"></div>
+            </div>
+          </Card>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

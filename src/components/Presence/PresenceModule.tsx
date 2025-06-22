@@ -67,68 +67,73 @@ const PresenceModule: React.FC = () => {
   const selectedAspectData = presenceAspects.find(aspect => aspect.id === selectedAspect);
 
   return (
-    <div className="space-y-6">
-      {/* Presence Overview */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-1">Presence & Charisma</h2>
-            <p className="text-white/70">Develop your magnetic personality</p>
-          </div>
-          <Sparkles className="w-8 h-8 text-indigo-400" />
-        </div>
+    <div className="space-y-8 py-8">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center"
+      >
+        <h2 className="text-2xl font-light text-black mb-2">Presence & Charisma</h2>
+        <p className="text-gray-600 font-light">Develop your magnetic personality</p>
+      </motion.div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {presenceAspects.map((aspect, index) => {
-            const Icon = aspect.icon;
-            return (
-              <motion.button
-                key={aspect.id}
-                onClick={() => setSelectedAspect(aspect.id)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                className={`p-4 rounded-xl border transition-all duration-300 text-left ${
-                  selectedAspect === aspect.id
-                    ? 'bg-indigo-500/20 border-indigo-400/30'
-                    : 'bg-white/5 border-white/10 hover:bg-white/10'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Icon className="w-6 h-6 text-indigo-400 mb-2" />
-                <div className="text-white font-medium mb-1">{aspect.name}</div>
-                <div className="text-2xl font-bold text-white mb-1">{aspect.score}%</div>
-                <div className="w-full bg-white/10 rounded-full h-2">
-                  <div
-                    className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full"
-                    style={{ width: `${aspect.score}%` }}
-                  />
-                </div>
-              </motion.button>
-            );
-          })}
-        </div>
-      </Card>
+      {/* Presence Overview */}
+      <div className="grid grid-cols-2 gap-4">
+        {presenceAspects.map((aspect, index) => {
+          const Icon = aspect.icon;
+          return (
+            <motion.button
+              key={aspect.id}
+              onClick={() => setSelectedAspect(aspect.id)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className={`p-6 border transition-all duration-300 text-left ${
+                selectedAspect === aspect.id
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-black border-gray-200 hover:border-gray-400'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Icon className={`w-5 h-5 mb-3 ${selectedAspect === aspect.id ? 'text-white' : 'text-gray-400'}`} />
+              <div className={`font-light mb-2 ${selectedAspect === aspect.id ? 'text-white' : 'text-black'}`}>
+                {aspect.name}
+              </div>
+              <div className={`text-2xl font-light mb-3 ${selectedAspect === aspect.id ? 'text-white' : 'text-black'}`}>
+                {aspect.score}%
+              </div>
+              <div className={`w-full h-1 ${selectedAspect === aspect.id ? 'bg-white/20' : 'bg-gray-100'}`}>
+                <div
+                  className={`h-1 ${selectedAspect === aspect.id ? 'bg-white' : 'bg-black'}`}
+                  style={{ width: `${aspect.score}%` }}
+                />
+              </div>
+            </motion.button>
+          );
+        })}
+      </div>
 
       {/* Selected Aspect Details */}
       {selectedAspectData && (
-        <Card className="p-6">
+        <Card className="p-8">
           <div className="flex items-center mb-4">
-            <selectedAspectData.icon className="w-6 h-6 text-indigo-400 mr-3" />
-            <h3 className="text-lg font-semibold text-white">{selectedAspectData.name}</h3>
+            <selectedAspectData.icon className="w-5 h-5 text-gray-400 mr-3" />
+            <h3 className="text-lg font-light text-black">{selectedAspectData.name}</h3>
           </div>
 
-          <p className="text-white/70 mb-6">{selectedAspectData.description}</p>
+          <p className="text-gray-600 font-light mb-6 leading-relaxed">{selectedAspectData.description}</p>
 
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-white/70">Current Level</span>
-              <span className="text-white font-semibold">{selectedAspectData.score}%</span>
+              <span className="text-gray-500 font-light">Current Level</span>
+              <span className="text-black font-light">{selectedAspectData.score}%</span>
             </div>
-            <div className="w-full bg-white/10 rounded-full h-3">
+            <div className="w-full bg-gray-100 h-1">
               <motion.div
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
+                className="bg-black h-1"
                 initial={{ width: 0 }}
                 animate={{ width: `${selectedAspectData.score}%` }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -137,18 +142,18 @@ const PresenceModule: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-white font-medium mb-3">Improvement Tips:</h4>
-            <div className="space-y-2">
+            <h4 className="text-black font-light mb-3">Improvement Tips:</h4>
+            <div className="space-y-3">
               {selectedAspectData.tips.map((tip, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6 }}
-                  className="flex items-center p-3 bg-white/5 rounded-xl border border-white/10"
+                  className="flex items-start p-4 bg-gray-50 border border-gray-100"
                 >
-                  <div className="w-2 h-2 bg-indigo-400 rounded-full mr-3" />
-                  <span className="text-white/80">{tip}</span>
+                  <div className="w-1 h-1 bg-black rounded-full mr-3 mt-2" />
+                  <span className="text-gray-700 font-light">{tip}</span>
                 </motion.div>
               ))}
             </div>
@@ -157,8 +162,8 @@ const PresenceModule: React.FC = () => {
       )}
 
       {/* Daily Practices */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Daily Practices</h3>
+      <div className="space-y-4">
+        <h3 className="text-lg font-light text-black">Daily Practices</h3>
         <div className="space-y-3">
           {dailyPractices.map((practice, index) => (
             <motion.div
@@ -166,29 +171,32 @@ const PresenceModule: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 ${
-                practice.completed
-                  ? 'bg-green-500/10 border-green-400/30'
-                  : 'bg-white/5 border-white/10'
-              }`}
             >
-              <div className="flex items-center">
-                <div className={`w-3 h-3 rounded-full mr-3 ${
-                  practice.completed ? 'bg-green-400' : 'bg-white/30'
-                }`} />
-                <div>
-                  <div className={`font-medium ${practice.completed ? 'text-green-400' : 'text-white'}`}>
-                    {practice.name}
-                  </div>
-                  <div className={`text-sm ${practice.completed ? 'text-green-400/70' : 'text-white/70'}`}>
-                    {practice.streak} day streak
+              <Card className={`p-6 transition-all duration-300 ${
+                practice.completed
+                  ? 'bg-gray-50 border-gray-200'
+                  : 'border-gray-100'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className={`w-2 h-2 rounded-full mr-3 ${
+                      practice.completed ? 'bg-black' : 'bg-gray-300'
+                    }`} />
+                    <div>
+                      <div className={`font-light ${practice.completed ? 'text-gray-500' : 'text-black'}`}>
+                        {practice.name}
+                      </div>
+                      <div className={`text-sm font-light ${practice.completed ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {practice.streak} day streak
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </motion.div>
           ))}
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

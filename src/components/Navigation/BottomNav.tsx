@@ -23,10 +23,10 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentScreen, onScreenChange }) 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed bottom-0 left-0 right-0 z-50"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100"
     >
-      <div className="mx-4 mb-4 backdrop-blur-xl bg-white/10 rounded-2xl border border-white/20 shadow-2xl">
-        <div className="flex items-center justify-around py-3">
+      <div className="max-w-md mx-auto px-6">
+        <div className="flex items-center justify-between py-4">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentScreen === item.id;
@@ -35,22 +35,23 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentScreen, onScreenChange }) 
               <motion.button
                 key={item.id}
                 onClick={() => onScreenChange(item.id)}
-                className={`flex flex-col items-center p-2 rounded-xl transition-all duration-300 ${
+                className={`flex flex-col items-center p-2 transition-all duration-300 ${
                   isActive 
-                    ? 'bg-white/20 text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'text-black' 
+                    : 'text-gray-400 hover:text-gray-600'
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-white' : 'text-white/60'}`} />
-                <span className={`text-xs font-medium ${isActive ? 'text-white' : 'text-white/60'}`}>
+                <Icon className={`w-5 h-5 mb-1 ${isActive ? 'text-black' : 'text-gray-400'}`} />
+                <span className={`text-xs font-light ${isActive ? 'text-black' : 'text-gray-400'}`}>
                   {item.label}
                 </span>
                 {isActive && (
                   <motion.div
                     layoutId="activeIndicator"
-                    className="absolute -bottom-1 w-1 h-1 bg-white rounded-full"
+                    className="absolute -bottom-0 w-8 h-px bg-black"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
               </motion.button>

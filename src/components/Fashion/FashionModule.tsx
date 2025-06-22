@@ -14,7 +14,6 @@ const FashionModule: React.FC = () => {
       rating: 4.5,
       lastWorn: '3 days ago',
       items: ['Navy Blazer', 'White Shirt', 'Dark Jeans', 'Brown Loafers'],
-      color: 'from-blue-500/20 to-indigo-500/20'
     },
     {
       id: 2,
@@ -23,7 +22,6 @@ const FashionModule: React.FC = () => {
       rating: 4.8,
       lastWorn: '1 week ago',
       items: ['Grey Hoodie', 'Black Joggers', 'White Sneakers'],
-      color: 'from-gray-500/20 to-slate-500/20'
     },
     {
       id: 3,
@@ -32,7 +30,6 @@ const FashionModule: React.FC = () => {
       rating: 5.0,
       lastWorn: '2 weeks ago',
       items: ['Black Dress Shirt', 'Charcoal Trousers', 'Black Oxfords'],
-      color: 'from-purple-500/20 to-pink-500/20'
     },
   ];
 
@@ -55,58 +52,60 @@ const FashionModule: React.FC = () => {
     : outfits.filter(outfit => outfit.category === selectedCategory);
 
   return (
-    <div className="space-y-6">
-      {/* Fashion Stats */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-1">Style Tracker</h2>
-            <p className="text-white/70">Your fashion journey</p>
-          </div>
-          <Shirt className="w-8 h-8 text-indigo-400" />
-        </div>
+    <div className="space-y-8 py-8">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center"
+      >
+        <h2 className="text-2xl font-light text-black mb-2">Style Tracker</h2>
+        <p className="text-gray-600 font-light">Your fashion journey</p>
+      </motion.div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {styleStats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                className="bg-white/5 rounded-xl p-4 border border-white/10"
-              >
-                <Icon className="w-5 h-5 text-indigo-400 mb-2" />
-                <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-white/70 text-sm">{stat.label}</div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </Card>
+      {/* Fashion Stats */}
+      <div className="grid grid-cols-2 gap-4">
+        {styleStats.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+            >
+              <Card className="p-6 text-center">
+                <Icon className="w-5 h-5 text-gray-400 mx-auto mb-3" />
+                <div className="text-2xl font-light text-black mb-1">{stat.value}</div>
+                <div className="text-gray-500 text-sm font-light">{stat.label}</div>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
 
       {/* Category Filter */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Categories</h3>
+      <div className="space-y-4">
+        <h3 className="text-lg font-light text-black">Categories</h3>
         <div className="flex space-x-2 overflow-x-auto">
           {categories.map((category) => (
             <motion.button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 py-2 rounded-xl border transition-all duration-300 whitespace-nowrap ${
+              className={`px-4 py-2 border transition-all duration-300 whitespace-nowrap font-light ${
                 selectedCategory === category.id
-                  ? 'bg-indigo-500/20 border-indigo-400/30 text-white'
-                  : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
               }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               {category.name} ({category.count})
             </motion.button>
           ))}
         </div>
-      </Card>
+      </div>
 
       {/* Outfits */}
       <div className="space-y-4">
@@ -118,24 +117,23 @@ const FashionModule: React.FC = () => {
             transition={{ delay: index * 0.1, duration: 0.6 }}
           >
             <Card className="p-6">
-              <div className={`bg-gradient-to-r ${outfit.color} rounded-xl p-4 mb-4`}>
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold text-white">{outfit.name}</h3>
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                    <span className="text-white font-medium">{outfit.rating}</span>
-                  </div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-light text-black">{outfit.name}</h3>
+                <div className="flex items-center">
+                  <Star className="w-4 h-4 text-gray-400 mr-1" />
+                  <span className="text-black font-light">{outfit.rating}</span>
                 </div>
-                <p className="text-white/70 text-sm">Last worn: {outfit.lastWorn}</p>
               </div>
+              
+              <p className="text-gray-500 text-sm font-light mb-4">Last worn: {outfit.lastWorn}</p>
 
               <div>
-                <h4 className="text-white font-medium mb-2">Items:</h4>
+                <h4 className="text-black font-light mb-2">Items:</h4>
                 <div className="flex flex-wrap gap-2">
                   {outfit.items.map((item, itemIndex) => (
                     <span
                       key={itemIndex}
-                      className="px-3 py-1 bg-white/10 rounded-full text-white/80 text-sm border border-white/20"
+                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-light border border-gray-200"
                     >
                       {item}
                     </span>

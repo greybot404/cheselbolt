@@ -31,30 +31,34 @@ const FitnessModule: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 py-8">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center"
+      >
+        <h2 className="text-2xl font-light text-black mb-2">Fitness Tracker</h2>
+        <p className="text-gray-600 font-light">Your weekly fitness journey</p>
+      </motion.div>
+
       {/* Weekly Progress */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-1">Fitness Tracker</h2>
-            <p className="text-white/70">Your weekly fitness journey</p>
+      <Card className="p-8">
+        <div className="text-center mb-6">
+          <div className="text-3xl font-light text-black mb-2">
+            {completedWorkouts}/{weeklyGoal}
           </div>
-          <Activity className="w-8 h-8 text-indigo-400" />
+          <div className="text-gray-500 text-sm font-light">Weekly Goal Progress</div>
         </div>
 
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-white/70">Weekly Goal Progress</span>
-            <span className="text-white font-semibold">{completedWorkouts}/{weeklyGoal} workouts</span>
-          </div>
-          <div className="w-full bg-white/10 rounded-full h-3">
-            <motion.div
-              className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${(completedWorkouts / weeklyGoal) * 100}%` }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            />
-          </div>
+        <div className="w-full bg-gray-100 h-2 mb-8">
+          <motion.div
+            className="bg-black h-2"
+            initial={{ width: 0 }}
+            animate={{ width: `${(completedWorkouts / weeklyGoal) * 100}%` }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -66,12 +70,12 @@ const FitnessModule: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                className="bg-white/5 rounded-xl p-4 border border-white/10"
+                className="text-center p-4 bg-gray-50 border border-gray-100"
               >
-                <Icon className="w-5 h-5 text-indigo-400 mb-2" />
-                <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-white/70 text-sm">{stat.unit}</div>
-                <div className="text-white/50 text-xs mt-1">{stat.label}</div>
+                <Icon className="w-5 h-5 text-gray-400 mx-auto mb-2" />
+                <div className="text-xl font-light text-black">{stat.value}</div>
+                <div className="text-gray-500 text-xs font-light">{stat.unit}</div>
+                <div className="text-gray-400 text-xs font-light mt-1">{stat.label}</div>
               </motion.div>
             );
           })}
@@ -79,8 +83,8 @@ const FitnessModule: React.FC = () => {
       </Card>
 
       {/* Recent Workouts */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Recent Workouts</h3>
+      <div className="space-y-4">
+        <h3 className="text-lg font-light text-black">Recent Workouts</h3>
         <div className="space-y-3">
           {recentWorkouts.map((workout, index) => (
             <motion.div
@@ -88,24 +92,27 @@ const FitnessModule: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10"
             >
-              <div>
-                <div className="text-white font-medium">{workout.name}</div>
-                <div className="text-white/70 text-sm">{workout.date}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-white font-medium">{workout.duration}</div>
-                <div className="text-indigo-400 text-sm">{workout.calories} cal</div>
-              </div>
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-black font-light">{workout.name}</div>
+                    <div className="text-gray-500 text-sm font-light">{workout.date}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-black font-light">{workout.duration}</div>
+                    <div className="text-gray-500 text-sm font-light">{workout.calories} cal</div>
+                  </div>
+                </div>
+              </Card>
             </motion.div>
           ))}
         </div>
-      </Card>
+      </div>
 
       {/* Weekly Plan */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Weekly Plan</h3>
+      <div className="space-y-4">
+        <h3 className="text-lg font-light text-black">Weekly Plan</h3>
         <div className="space-y-2">
           {workoutPlan.map((day, index) => (
             <motion.div
@@ -113,29 +120,32 @@ const FitnessModule: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05, duration: 0.6 }}
-              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 ${
-                day.completed
-                  ? 'bg-green-500/10 border-green-400/30'
-                  : 'bg-white/5 border-white/10'
-              }`}
             >
-              <div className="flex items-center">
-                <div className={`w-3 h-3 rounded-full mr-3 ${
-                  day.completed ? 'bg-green-400' : 'bg-white/30'
-                }`} />
-                <div>
-                  <div className={`font-medium ${day.completed ? 'text-green-400' : 'text-white'}`}>
-                    {day.day}
+              <Card className={`p-4 transition-all duration-300 ${
+                day.completed
+                  ? 'bg-gray-50 border-gray-200'
+                  : 'border-gray-100'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className={`w-2 h-2 rounded-full mr-3 ${
+                      day.completed ? 'bg-black' : 'bg-gray-300'
+                    }`} />
+                    <div>
+                      <div className={`font-light ${day.completed ? 'text-gray-500' : 'text-black'}`}>
+                        {day.day}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`text-sm font-light ${day.completed ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {day.workout}
                   </div>
                 </div>
-              </div>
-              <div className={`text-sm ${day.completed ? 'text-green-400/70' : 'text-white/70'}`}>
-                {day.workout}
-              </div>
+              </Card>
             </motion.div>
           ))}
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

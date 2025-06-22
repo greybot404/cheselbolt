@@ -12,9 +12,9 @@ export function Card({ children, className, onClick, selected }: CardProps) {
   return (
     <div
       className={cn(
-        'bg-white border-2 transition-all duration-200',
-        onClick ? 'cursor-pointer hover:border-gray-400' : 'border-gray-200',
-        selected ? 'border-black' : 'border-gray-200',
+        'bg-white border border-gray-100 shadow-sm transition-all duration-300',
+        onClick ? 'cursor-pointer hover:shadow-md hover:border-gray-200' : '',
+        selected ? 'border-black shadow-md' : '',
         className
       )}
       onClick={onClick}

@@ -9,47 +9,53 @@ interface GenderSelectionProps {
 
 const GenderSelection: React.FC<GenderSelectionProps> = ({ onComplete }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-8 bg-white">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="w-full max-w-sm"
       >
-        <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-center mb-8"
-          >
-            <h2 className="text-3xl font-bold text-white mb-2">Welcome to Chesel</h2>
-            <p className="text-white/70">Let's personalize your experience</p>
-          </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-2xl font-light text-black mb-3 tracking-wide">Welcome to</h2>
+          <h1 className="text-3xl font-light text-black tracking-[0.2em] mb-4" style={{ fontFamily: 'serif' }}>
+            CHESEL
+          </h1>
+          <div className="w-16 h-px bg-black mx-auto mb-6"></div>
+          <p className="text-gray-600 font-light">Choose your profile to begin</p>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="space-y-4"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="space-y-4"
+        >
+          <button
+            onClick={() => onComplete('male')}
+            className="w-full h-16 bg-white border border-gray-200 hover:border-black text-black font-light text-lg transition-all duration-300 hover:shadow-sm group"
           >
-            <Button
-              onClick={() => onComplete('male')}
-              className="w-full h-16 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30 border border-blue-400/30 text-white font-semibold text-lg transition-all duration-300 hover:scale-105"
-            >
-              <User className="w-6 h-6 mr-3" />
+            <div className="flex items-center justify-center">
+              <User className="w-5 h-5 mr-3 text-gray-400 group-hover:text-black transition-colors duration-300" />
               Male
-            </Button>
+            </div>
+          </button>
 
-            <Button
-              onClick={() => onComplete('female')}
-              className="w-full h-16 bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 border border-pink-400/30 text-white font-semibold text-lg transition-all duration-300 hover:scale-105"
-            >
-              <UserCheck className="w-6 h-6 mr-3" />
+          <button
+            onClick={() => onComplete('female')}
+            className="w-full h-16 bg-white border border-gray-200 hover:border-black text-black font-light text-lg transition-all duration-300 hover:shadow-sm group"
+          >
+            <div className="flex items-center justify-center">
+              <UserCheck className="w-5 h-5 mr-3 text-gray-400 group-hover:text-black transition-colors duration-300" />
               Female
-            </Button>
-          </motion.div>
-        </div>
+            </div>
+          </button>
+        </motion.div>
       </motion.div>
     </div>
   );
