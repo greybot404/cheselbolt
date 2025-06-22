@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, Circle, Trophy, Target, Calendar } from 'lucide-react';
-import Card from '../ui/Card';
+import { Card } from '../ui/Card';
 
 interface DailyProtocolProps {
   userGender: 'male' | 'female' | null;

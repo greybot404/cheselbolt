@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shirt, Star, Calendar, Palette } from 'lucide-react';
-import Card from '../ui/Card';
+import { Card } from '../ui/Card';
 
 const FashionModule: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Scale, TrendingUp, Target, Calendar } from 'lucide-react';
-import Card from '../ui/Card';
+import { Card } from '../ui/Card';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 const BodyModule: React.FC = () => {

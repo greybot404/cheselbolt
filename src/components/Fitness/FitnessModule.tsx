@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Clock, Flame, Trophy } from 'lucide-react';
-import Card from '../ui/Card';
+import { Card } from '../ui/Card';
 
 const FitnessModule: React.FC = () => {
   const [weeklyGoal] = useState(5);

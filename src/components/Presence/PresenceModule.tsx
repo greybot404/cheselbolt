@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Heart, Brain, Users } from 'lucide-react';
-import Card from '../ui/Card';
+import { Card } from '../ui/Card';
 
 const PresenceModule: React.FC = () => {
   const [selectedAspect, setSelectedAspect] = useState('confidence');
